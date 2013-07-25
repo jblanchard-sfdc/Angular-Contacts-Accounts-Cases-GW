@@ -3,7 +3,8 @@
     <tr>
         <th class='hidden-phone'>Id</th>
         <th>Name</th>
-        <th>Description</th>
+        <th>Number</th>
+        <th>Subject</th>
     </tr>
     </thead>
     <tbody>
@@ -11,7 +12,8 @@
     <tr ng-repeat="current in cases">
         <td class='hidden-phone'>{{current.Id}}</td>
         <td><a ng-click="doView()" >{{current.Name}}</a></td>
-        <td>{{current.Description}}</td>
+        <td>{{current.CaseNumber}}</td>
+        <td>{{current.Subject}}</td>
     </tr>
     </tbody>
 </table>
