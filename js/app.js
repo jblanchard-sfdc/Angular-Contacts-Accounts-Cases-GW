@@ -12,7 +12,8 @@ app.config(function ($routeProvider) {
         when('/view/:contactId', {controller: 'ContactViewCtrl', templateUrl: 'partials/contact/view.html'}).
         when('/edit/:contactId', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
         when('/new', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
-        when('/accounts', {controller: 'AccountListCtrl', templateUrl: 'partials/account/list.html'}).        
+        when('/accounts', {controller: 'AccountListCtrl', templateUrl: 'partials/account/list.html'}).  
+        when('/cases', {controller: 'CaseListCtrl', templateUrl: 'partials/case/list.html'}). 
         otherwise({redirectTo: '/'});
 });
 
@@ -36,6 +37,11 @@ angular.module('Contact', []).factory('Contact', function (AngularForceObjectFac
 
 angular.module('Account', []).factory('Account', function (AngularForceObjectFactory) {
     var Account = AngularForceObjectFactory({type: 'Account', fields: ['Id', 'Name', 'BillingCity'], where: '', limit: 50});
+    return Account;
+});
+
+angular.module('Case', []).factory('Case', function (AngularForceObjectFactory) {
+    var Account = AngularForceObjectFactory({type: 'Case', fields: ['Id', 'Name', 'Description'], where: '', limit: 50});
     return Account;
 });
 
@@ -247,6 +253,27 @@ app.controller('AccountListCtrl', ['$scope', 'AngularForce', '$location', 'Accou
 
         $scope.doView = function() {
             alert('Account View: implement it first and tweet @ReidCarlberg for a surprise.');
+        }
+    }
+]);
+
+app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case', 
+    function($scope, AngularForce, $location, Case) {
+        $scope.authenticated = AngularForce.authenticated();
+        if (!$scope.authenticated) {
+            return $location.path('/login');
+        }
+
+        Case.query(function (data) {
+                $scope.cases = data.records;
+                $scope.$apply();//Required coz sfdc uses jquery.ajax
+            }, function (data) {
+                console.log(data);
+                alert('Query Error');
+            });
+
+        $scope.doView = function() {
+            alert('Case View: implement it first and tweet @ReidCarlberg for a surprise.');
         }
     }
 ]);

@@ -1,0 +1,17 @@
+<table width="80%" class="table">
+    <thead>
+    <tr>
+        <th class='hidden-phone'>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr ng-repeat="current in cases">
+        <td class='hidden-phone'>{{current.Id}}</td>
+        <td><a ng-click="doView()" >{{current.Name}}</a></td>
+        <td>{{current.Description}}</td>
+    </tr>
+    </tbody>
+</table>

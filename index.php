@@ -21,7 +21,8 @@ if(file_exists('../local.settings.php'))
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.js"></script>
     <script type="text/javascript">
-        var app = angular.module('AngularSFDemo', ['AngularForce', 'AngularForceObjectFactory', 'Contact', 'Account']);
+        var app = angular.module('AngularSFDemo', ['AngularForce', 'AngularForceObjectFactory', 'Contact', 'Account', 'Case']);
+        
 
 
         <?
