@@ -14,6 +14,7 @@ app.config(function ($routeProvider) {
         when('/new', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
         when('/accounts', {controller: 'AccountListCtrl', templateUrl: 'partials/account/list.html'}).  
         when('/cases', {controller: 'CaseListCtrl', templateUrl: 'partials/case/list.html'}). 
+        when('/casesView', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
         otherwise({redirectTo: '/'});
 });
 
@@ -273,10 +274,24 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
             });
 
         $scope.doView = function() {
-            alert('Case View: implement it first and tweet @ReidCarlberg for a surprise.');
+             $location.path('/casesView/' + caseId);
         }
     }
 ]);
 
+app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Case', 
+    function($scope, AngularForce, $location, $routeParams, Case) {
+        $scope.authenticated = AngularForce.authenticated();
+        if (!$scope.authenticated) {
+            return $location.path('/login');
+        }
 
+        Case.get({id: $routeParams.caseId}, function (case) {
+            
+            self.original = case;
+            $scope.case = new Case(self.original);
+            $scope.$apply();//Required coz sfdc uses jquery.ajax
+        });
+    }
+]);
 
