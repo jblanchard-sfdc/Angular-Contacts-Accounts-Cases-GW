@@ -1,6 +1,6 @@
 
 /**
- * Configure all the AngularJS routes here.
+ * Configure all the AngularJS routes here...
  */
 app.config(function ($routeProvider) {
     $routeProvider.
