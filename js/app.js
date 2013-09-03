@@ -274,7 +274,7 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
                 alert('Query Error');
             });
         
-        $scope.doView = function (caseId) {
+        $scope.doView = function () {
             $location.path('/casesView/' + caseId);
         };
     }
