@@ -13,7 +13,7 @@ app.config(function ($routeProvider) {
         when('/new', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
         when('/accounts', {controller: 'AccountListCtrl', templateUrl: 'partials/account/list.html'}).  
         when('/cases', {controller: 'CaseListCtrl', templateUrl: 'partials/case/list.html'}). 
-        when('/casesView', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
+        when('/casesView:caseId', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
         otherwise({redirectTo: '/'});
 });
 
@@ -272,12 +272,12 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
                 alert('Query Error');
             });
 
-        $scope.doView = function() {
+        $scope.doView = function(caseId) {
              $location.path('/casesView/' + caseId);
         }
     }
 ]);
-
+/*
 app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Case', 
     function($scope, AngularForce, $location, $routeParams, Case) {
         $scope.authenticated = AngularForce.authenticated();
@@ -293,4 +293,4 @@ app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routePa
         });
     }
 ]);
-
+*/
