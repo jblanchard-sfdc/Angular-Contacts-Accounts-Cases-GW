@@ -14,7 +14,7 @@ app.config(function ($routeProvider) {
         when('/new', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
         when('/accounts', {controller: 'AccountListCtrl', templateUrl: 'partials/account/list.html'}).  
         when('/cases', {controller: 'CaseListCtrl', templateUrl: 'partials/case/list.html'}). 
-        when('/casesView:caseId', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
+        when('/casesView', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
         otherwise({redirectTo: '/'});
 });
 
@@ -139,7 +139,6 @@ app.controller('ContactListCtrl', ['$scope', 'AngularForce', '$location', 'Conta
         $scope.doView = function (contactId) {
             $location.path('/view/' + contactId);
         };
-        
 
         $scope.doCreate = function () {
             $location.path('/new');
@@ -273,10 +272,10 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
                 console.log(data);
                 alert('Query Error');
             });
-        
-        $scope.doView = function (caseId) {
-            $location.path('/casesView/' + caseId);
-        };
+
+        $scope.doView = function() {
+             $location.path('/casesView/' + caseId);
+        }
     }
 ]);
 
