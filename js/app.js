@@ -263,18 +263,22 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
         if (!$scope.authenticated) {
             return $location.path('/login');
         }
-
-        Case.query(function (data) {
+        
+        $scope.doList = function() {
+            $scope.searchTerm = '';
+        	Case.query(function (data) {
                 $scope.cases = data.records;
                 $scope.$apply();//Required coz sfdc uses jquery.ajax
             }, function (data) {
-                console.log(data);
                 alert('Query Error');
-            });
+                }, 'Select Id, CaseNumber, Subject, Type, Status Limit 20');            
+        }
 
         $scope.doView = function(caseId) {
              $location.path('/casesView/' + caseId);
         }
+        
+        $scope.doList();        
     }
 ]);
 /*
