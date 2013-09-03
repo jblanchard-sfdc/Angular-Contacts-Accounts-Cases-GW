@@ -281,7 +281,7 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
         $scope.doList();        
     }
 ]);
-/*
+
 app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Case', 
     function($scope, AngularForce, $location, $routeParams, Case) {
         $scope.authenticated = AngularForce.authenticated();
@@ -297,4 +297,4 @@ app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routePa
         });
     }
 ]);
-*/
+
