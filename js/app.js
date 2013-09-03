@@ -1,4 +1,3 @@
-
 /**
  * Configure all the AngularJS routes here...
  */
@@ -139,7 +138,6 @@ app.controller('ContactListCtrl', ['$scope', 'AngularForce', '$location', 'Conta
         $scope.doView = function (contactId) {
             $location.path('/view/' + contactId);
         };
-        
 
         $scope.doCreate = function () {
             $location.path('/new');
@@ -273,10 +271,10 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
                 console.log(data);
                 alert('Query Error');
             });
-        
-        $scope.doView = function () {
-            $location.path('/casesView/' + caseId);
-        };
+
+        $scope.doView = function() {
+             $location.path('/casesView/' + caseId);
+        }
     }
 ]);
 
