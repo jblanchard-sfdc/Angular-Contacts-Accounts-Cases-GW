@@ -1,3 +1,4 @@
+
 /**
  * Configure all the AngularJS routes here...
  */
@@ -40,9 +41,9 @@ angular.module('Account', []).factory('Account', function (AngularForceObjectFac
     return Account;
 });
 
-angular.module('Case', []).factory('Case', function (AngularForceObjectFactory) {
-    var Case = AngularForceObjectFactory({type: 'Case', fields: ['Id', 'CaseNumber', 'Subject', 'Type', 'Status'], where: '', limit: 10});
-    return Case;
+angular.module('Scase', []).factory('Scase', function (AngularForceObjectFactory) {
+    var Scase = AngularForceObjectFactory({type: 'Case', fields: ['Id', 'CaseNumber', 'Subject', 'Type', 'Status'], where: '', limit: 10});
+    return Scase;
 });
 
 
@@ -257,8 +258,8 @@ app.controller('AccountListCtrl', ['$scope', 'AngularForce', '$location', 'Accou
     }
 ]);
 
-app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case', 
-    function($scope, AngularForce, $location, Case) {
+app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Scase', 
+    function($scope, AngularForce, $location, Scase) {
         $scope.authenticated = AngularForce.authenticated();
         if (!$scope.authenticated) {
             return $location.path('/login');
@@ -266,7 +267,7 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
         
         $scope.doList = function() {
             $scope.searchTerm = '';
-        	Case.query(function (data) {
+        	Scase.query(function (data) {
                 $scope.cases = data.records;
                 $scope.$apply();//Required coz sfdc uses jquery.ajax
             }, function (data) {
@@ -282,17 +283,17 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
     }
 ]);
 
-app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Case', 
-    function($scope, AngularForce, $location, $routeParams, Case) {
+app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Scase', 
+    function($scope, AngularForce, $location, $routeParams, Scase) {
         $scope.authenticated = AngularForce.authenticated();
         if (!$scope.authenticated) {
             return $location.path('/login');
         }
 
-        Case.get({id: $routeParams.caseId}, function (case) {
+        Scase.get({id: $routeParams.caseId}, function (scase) {
             
-            self.original = case;
-            $scope.case = new Case(self.original);
+            self.original = scase;
+            $scope.case = new Scase(self.original);
             $scope.$apply();//Required coz sfdc uses jquery.ajax
         });
     }
