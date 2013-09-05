@@ -12,6 +12,7 @@ app.config(function ($routeProvider) {
         when('/edit/:contactId', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
         when('/new', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
         when('/accounts', {controller: 'AccountListCtrl', templateUrl: 'partials/account/list.html'}).  
+        when('/accountsView/:accountId', {controller: 'AccountViewCtrl', templateUrl: 'partials/account/view.html'}).
         when('/cases', {controller: 'CaseListCtrl', templateUrl: 'partials/case/list.html'}). 
         when('/casesView/:caseId', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
         otherwise({redirectTo: '/'});
@@ -36,7 +37,7 @@ angular.module('Contact', []).factory('Contact', function (AngularForceObjectFac
 });
 
 angular.module('Account', []).factory('Account', function (AngularForceObjectFactory) {
-    var Account = AngularForceObjectFactory({type: 'Account', fields: ['Id', 'Name', 'BillingCity'], where: '', limit: 50});
+    var Account = AngularForceObjectFactory({type: 'Account', fields: ['Id', 'Name', 'AccountNumber', 'BillingCity'], where: '', limit: 20});
     return Account;
 });
 
@@ -164,6 +165,22 @@ app.controller('ContactViewCtrl', ['$scope', 'AngularForce', '$location', '$rout
     }
 ]);
 
+app.controller('AccountViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Account', 
+    function($scope, AngularForce, $location, $routeParams, Account) {
+        $scope.authenticated = AngularForce.authenticated();
+        if (!$scope.authenticated) {
+            return $location.path('/login');
+        }
+
+        Account.get({id: $routeParams.accountId}, function (account) {
+            
+            self.original = account;
+            $scope.account = new Account(self.original);
+            $scope.$apply();//Required coz sfdc uses jquery.ajax
+        });
+    }
+]);
+
 app.controller('ContactDetailCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Contact', 
     function($scope, AngularForce, $location, $routeParams, Contact) {
         var self = this;
@@ -252,7 +269,7 @@ app.controller('AccountListCtrl', ['$scope', 'AngularForce', '$location', 'Accou
             });
 
         $scope.doView = function() {
-            alert('Account View: implement it first and tweet @ReidCarlberg for a surprise.');
+             $location.path('/accountsView/' + accountId);
         }
     }
 ]);
