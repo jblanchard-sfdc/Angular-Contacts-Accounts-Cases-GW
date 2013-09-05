@@ -13,6 +13,7 @@ app.config(function ($routeProvider) {
         when('/new', {controller: 'ContactDetailCtrl', templateUrl: 'partials/contact/edit.html'}).
         when('/accounts', {controller: 'AccountListCtrl', templateUrl: 'partials/account/list.html'}).  
         when('/accountsView/:accountId', {controller: 'AccountViewCtrl', templateUrl: 'partials/account/view.html'}).
+        when('/accountsEdit/:accountId', {controller: 'AccountDetailCtrl', templateUrl: 'partials/account/edit.html'}).
         when('/cases', {controller: 'CaseListCtrl', templateUrl: 'partials/case/list.html'}). 
         when('/casesView/:caseId', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
         otherwise({redirectTo: '/'});
