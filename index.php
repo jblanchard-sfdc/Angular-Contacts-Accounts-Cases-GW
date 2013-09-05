@@ -49,7 +49,7 @@ if(file_exists('../local.settings.php'))
     <div class="navbar-inner">
         <div class="container">
             <a class="btn" href="#/home">Home</a>
-            <a class="brand" href="#/home">Salesforce Contacts</a>
+            <a class="brand" href="#/home">Salesforce Objects</a>
         </div>
     </div>
 </div>
