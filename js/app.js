@@ -286,11 +286,11 @@ app.controller('AccountDetailCtrl', ['$scope', 'AngularForce', '$location', '$ro
 
         $scope.destroyError = null;
 
-        if ($routeParams.contactId) {
+        if ($routeParams.accountId) {
             AngularForce.login(function () {
-                Account.get({id: $routeParams.contactId}, function (account) {
+                Account.get({id: $routeParams.accountId}, function (account) {
                     self.original = account;
-                    $scope.contact = new Account(self.original);
+                    $scope.account = new Account(self.original);
                     $scope.$apply();//Required coz sfdc uses jquery.ajax
                 });
             });
@@ -340,7 +340,7 @@ app.controller('AccountDetailCtrl', ['$scope', 'AngularForce', '$location', '$ro
         };
 
         $scope.doCancel = function () {
-            if ($scope.contact.Id) {
+            if ($scope.account.Id) {
                 $location.path('/accountsView/' + $scope.account.Id);
             } else {
                 $location.path('/account');
