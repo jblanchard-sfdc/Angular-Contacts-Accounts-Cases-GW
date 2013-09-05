@@ -16,6 +16,7 @@ app.config(function ($routeProvider) {
         when('/accountsEdit/:accountId', {controller: 'AccountDetailCtrl', templateUrl: 'partials/account/edit.html'}).
         when('/cases', {controller: 'CaseListCtrl', templateUrl: 'partials/case/list.html'}). 
         when('/casesView/:caseId', {controller: 'CaseViewCtrl', templateUrl: 'partials/case/view.html'}).
+        when('/casesEdit/:caseId', {controller: 'CaseDetailCtrl', templateUrl: 'partials/case/edit.html'}).
         otherwise({redirectTo: '/'});
 });
 
@@ -176,6 +177,31 @@ app.controller('AccountListCtrl', ['$scope', 'AngularForce', '$location', 'Accou
     }
 ]);
 
+app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case', 
+    function($scope, AngularForce, $location, Case) {
+        $scope.authenticated = AngularForce.authenticated();
+        if (!$scope.authenticated) {
+            return $location.path('/login');
+        }
+        
+        $scope.doList = function() {
+            $scope.searchTerm = '';
+        	Case.query(function (data) {
+                $scope.cases = data.records;
+                $scope.$apply();//Required coz sfdc uses jquery.ajax
+            }, function (data) {
+                alert('Query Error');
+                }, 'Select Id, CaseNumber, Subject, Type, Status From Case Limit 20');            
+        }
+
+        $scope.doView = function(caseId) {
+             $location.path('/casesView/' + caseId);
+        }
+        
+        $scope.doList();        
+    }
+]);
+
 app.controller('ContactViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Contact', 
     function($scope, AngularForce, $location, $routeParams, Contact) {
         $scope.authenticated = AngularForce.authenticated();
@@ -203,6 +229,22 @@ app.controller('AccountViewCtrl', ['$scope', 'AngularForce', '$location', '$rout
             
             self.original = account;
             $scope.account = new Account(self.original);
+            $scope.$apply();//Required coz sfdc uses jquery.ajax
+        });
+    }
+]);
+
+app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Case', 
+    function($scope, AngularForce, $location, $routeParams, Case) {
+        $scope.authenticated = AngularForce.authenticated();
+        if (!$scope.authenticated) {
+            return $location.path('/login');
+        }
+
+        Case.get({id: $routeParams.caseId}, function (sfcase) {
+            
+            self.original = sfcase;
+            $scope.case = new Case(self.original);
             $scope.$apply();//Required coz sfdc uses jquery.ajax
         });
     }
@@ -343,7 +385,78 @@ app.controller('AccountDetailCtrl', ['$scope', 'AngularForce', '$location', '$ro
             if ($scope.account.Id) {
                 $location.path('/accountsView/' + $scope.account.Id);
             } else {
-                $location.path('/account');
+                $location.path('/accounts');
+            }
+        };
+
+
+    }
+]);
+
+app.controller('CaseDetailCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Case', 
+    function($scope, AngularForce, $location, $routeParams, Case) {
+        var self = this;
+
+        $scope.destroyError = null;
+
+        if ($routeParams.caseId) {
+            AngularForce.login(function () {
+                Case.get({id: $routeParams.caseId}, function (sfcase) {
+                    self.original = sfcase;
+                    $scope.case = new Case(self.original);
+                    $scope.$apply();//Required coz sfdc uses jquery.ajax
+                });
+            });
+        } else {
+            $scope.case = new Case();
+        }
+
+        $scope.isClean = function () {
+            return angular.equals(self.original, $scope.case);
+        };
+
+        $scope.destroy = function () {
+            self.original.destroy(
+                function () {
+                    $scope.$apply(function () {
+                        $scope.destroyError = null;
+                        $location.path('/cases');
+                    });
+                },
+                function (data) {
+                    if (data.responseText) {
+                        var res = angular.fromJson(data.responseText);
+                    }
+                    $scope.$apply(function() { $scope.destroyError = res[0].message });
+                    console.log('delete error');
+
+                }
+            );
+        };
+
+        $scope.save = function () {
+            if ($scope.case.Id) {
+                $scope.case.update(function () {
+                    $scope.$apply(function () {
+                        $location.path('/casesView/' + $scope.case.Id);
+                    });
+
+                });
+            } else {
+                Case.save($scope.case, function (sfcase) {
+                    var c = sfcase;
+                    $scope.$apply(function () {
+                        $location.path('/casesView/' + c.Id || c.id);
+                    });
+                });
+            }
+        };
+
+        $scope.doCancel = function () {
+            if ($scope.case.Id) {
+                $location.path('/casesView/' + $scope.case.Id);
+            } else {
+                $location.path('/cases');
             }
         };
 
@@ -352,44 +465,5 @@ app.controller('AccountDetailCtrl', ['$scope', 'AngularForce', '$location', '$ro
 ]);
 
 
-app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case', 
-    function($scope, AngularForce, $location, Case) {
-        $scope.authenticated = AngularForce.authenticated();
-        if (!$scope.authenticated) {
-            return $location.path('/login');
-        }
-        
-        $scope.doList = function() {
-            $scope.searchTerm = '';
-        	Case.query(function (data) {
-                $scope.cases = data.records;
-                $scope.$apply();//Required coz sfdc uses jquery.ajax
-            }, function (data) {
-                alert('Query Error');
-                }, 'Select Id, CaseNumber, Subject, Type, Status From Case Limit 20');            
-        }
 
-        $scope.doView = function(caseId) {
-             $location.path('/casesView/' + caseId);
-        }
-        
-        $scope.doList();        
-    }
-]);
-
-app.controller('CaseViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Case', 
-    function($scope, AngularForce, $location, $routeParams, Case) {
-        $scope.authenticated = AngularForce.authenticated();
-        if (!$scope.authenticated) {
-            return $location.path('/login');
-        }
-
-        Case.get({id: $routeParams.caseId}, function (sfcase) {
-            
-            self.original = sfcase;
-            $scope.case = new Case(self.original);
-            $scope.$apply();//Required coz sfdc uses jquery.ajax
-        });
-    }
-]);
 
