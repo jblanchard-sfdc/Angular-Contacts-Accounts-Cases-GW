@@ -1,10 +1,13 @@
 <div class="span4 well">
-    <p><strong>{{case.CaseNumber}}</strong></p>
-    <p>{{case.Subject}}</p>
-    <p>{{case.Type}}</p>
-    <p>{{case.Status}}</p>
+    <p><strong>Case Number: {{case.CaseNumber}}</strong></p>
+    <p>Subject: {{case.Subject}}</p>
+    <p>Type: {{case.Type}}</p>
+    <p>Status: {{case.Status}}</p>
 
-   
+	 <p>
+        <a class="btn" href="#/casesEdit/{{case.Id}}">Edit</a>
         <a class="btn btn-primary" href="#/cases">Back to Cases</a>
     </p>
+   
+    
 </div>
