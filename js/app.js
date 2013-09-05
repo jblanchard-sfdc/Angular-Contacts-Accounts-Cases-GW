@@ -366,7 +366,7 @@ app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case',
                 $scope.$apply();//Required coz sfdc uses jquery.ajax
             }, function (data) {
                 alert('Query Error');
-                }, 'Select Id, CaseNumber, Subject, Type, Status Limit 20');            
+                }, 'Select Id, CaseNumber, Subject, Type, Status From Case Limit 20');            
         }
 
         $scope.doView = function(caseId) {
