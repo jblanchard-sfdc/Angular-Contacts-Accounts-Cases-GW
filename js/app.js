@@ -150,6 +150,32 @@ app.controller('ContactListCtrl', ['$scope', 'AngularForce', '$location', 'Conta
     }
 ]);
 
+app.controller('AccountListCtrl', ['$scope', 'AngularForce', '$location', 'Account', 
+    function($scope, AngularForce, $location, Account) {
+        $scope.authenticated = AngularForce.authenticated();
+        if (!$scope.authenticated) {
+            return $location.path('/login');
+        }
+
+            
+    	$scope.doList = function() {
+            $scope.searchTerm = '';
+            Account.query(function (data) {
+                    $scope.accounts = data.records;
+                    $scope.$apply();//Required coz sfdc uses jquery.ajax
+                }, function (data) {
+                    alert('Query Error');
+                }, 'Select Id, Name, AccountNumber, BillingCity From Account Limit 20 ');            
+        }
+
+        $scope.doView = function() {
+             $location.path('/accountsView/' + accountId);
+        }
+        
+        $scope.doList();       
+    }
+]);
+
 app.controller('ContactViewCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Contact', 
     function($scope, AngularForce, $location, $routeParams, Contact) {
         $scope.authenticated = AngularForce.authenticated();
@@ -325,26 +351,6 @@ app.controller('AccountDetailCtrl', ['$scope', 'AngularForce', '$location', '$ro
     }
 ]);
 
-app.controller('AccountListCtrl', ['$scope', 'AngularForce', '$location', 'Account', 
-    function($scope, AngularForce, $location, Account) {
-        $scope.authenticated = AngularForce.authenticated();
-        if (!$scope.authenticated) {
-            return $location.path('/login');
-        }
-
-        Account.query(function (data) {
-                $scope.accounts = data.records;
-                $scope.$apply();//Required coz sfdc uses jquery.ajax
-            }, function (data) {
-                console.log(data);
-                alert('Query Error');
-            });
-
-        $scope.doView = function() {
-             $location.path('/accountsView/' + accountId);
-        }
-    }
-]);
 
 app.controller('CaseListCtrl', ['$scope', 'AngularForce', '$location', 'Case', 
     function($scope, AngularForce, $location, Case) {
