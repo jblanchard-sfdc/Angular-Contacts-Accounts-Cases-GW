@@ -1,0 +1,38 @@
+
+<div ng-show="destroyError">
+<p>Error: {{destroyError}}</p>
+</div>
+
+<form class="well" name="myForm">
+    <div class="control-group" ng-class="{error: myForm.Name.$invalid}">
+        <label>Account Name</label>
+        <input type="text" name="Name" ng-model="account.Name" required>
+        <span ng-show="myForm.NameName.$error.required" class="help-inline">
+        Required</span>
+
+        <label>Account Number</label>
+        <input type="text" name="AccountNumber" ng-model="account.AccountNumber" required>
+        <span ng-show="myForm.AccountNumber.$error.required" class="help-inline">
+        Required</span>
+
+        <label>Billing City</label>
+        <input type="text" name="BillingCity" ng-model="account.BillingCity" required>
+        <span ng-show="myForm.BillingCity.$error.required" class="help-inline">
+        Required</span>
+
+        <input disabled="disabled" type="hidden" name="Id" ng-model="account.Id">
+    </div>
+
+
+    <p style='text-align: center;padding-bottom: 30px;padding-top: 40px;'>
+        <button ng-click="save()" ng-disabled="isClean() || myForm.$invalid"
+                class="btn btn-primary">Save
+        </button>
+        <button ng-click="destroy()"
+                ng-show="account.Id" class="btn btn-danger">Delete
+        </button>
+        <button ng-click="doCancel()" class="btn">Cancel</button>
+    </p>
+
+</form>
+

@@ -253,6 +253,77 @@ app.controller('ContactDetailCtrl', ['$scope', 'AngularForce', '$location', '$ro
     }
 ]);
 
+app.controller('AccountDetailCtrl', ['$scope', 'AngularForce', '$location', '$routeParams', 'Account', 
+    function($scope, AngularForce, $location, $routeParams, Account) {
+        var self = this;
+
+        $scope.destroyError = null;
+
+        if ($routeParams.contactId) {
+            AngularForce.login(function () {
+                Account.get({id: $routeParams.contactId}, function (account) {
+                    self.original = account;
+                    $scope.contact = new Account(self.original);
+                    $scope.$apply();//Required coz sfdc uses jquery.ajax
+                });
+            });
+        } else {
+            $scope.account = new Account();
+        }
+
+        $scope.isClean = function () {
+            return angular.equals(self.original, $scope.account);
+        };
+
+        $scope.destroy = function () {
+            self.original.destroy(
+                function () {
+                    $scope.$apply(function () {
+                        $scope.destroyError = null;
+                        $location.path('/accounts');
+                    });
+                },
+                function (data) {
+                    if (data.responseText) {
+                        var res = angular.fromJson(data.responseText);
+                    }
+                    $scope.$apply(function() { $scope.destroyError = res[0].message });
+                    console.log('delete error');
+
+                }
+            );
+        };
+
+        $scope.save = function () {
+            if ($scope.account.Id) {
+                $scope.account.update(function () {
+                    $scope.$apply(function () {
+                        $location.path('/accountsView/' + $scope.account.Id);
+                    });
+
+                });
+            } else {
+                Account.save($scope.account, function (account) {
+                    var a = account;
+                    $scope.$apply(function () {
+                        $location.path('/accountsView/' + a.Id || a.id);
+                    });
+                });
+            }
+        };
+
+        $scope.doCancel = function () {
+            if ($scope.contact.Id) {
+                $location.path('/accountsView/' + $scope.account.Id);
+            } else {
+                $location.path('/account');
+            }
+        };
+
+
+    }
+]);
+
 app.controller('AccountListCtrl', ['$scope', 'AngularForce', '$location', 'Account', 
     function($scope, AngularForce, $location, Account) {
         $scope.authenticated = AngularForce.authenticated();
